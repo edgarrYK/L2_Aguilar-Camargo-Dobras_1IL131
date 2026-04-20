@@ -1,19 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F3F0FA"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Top AppBar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#6B3FA0"
+            android:padding="8dp"
+            app:title="Tienda de Tecnología"
+            app:titleTextColor="#FFFFFF" />
+
+        <!-- Product count label -->
+        <TextView
+            android:id="@+id/tvProductCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
+            android:text="0 productos"
+            android:textColor="#6B3FA0"
+            android:textSize="12sp" />
+
+        <!-- Form Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Section title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nuevo producto"
+                    android:textColor="#6B3FA0"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Product name -->
+                <EditText
+                    android:id="@+id/etNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre del producto"
+                    android:textColorHint="#AAAAAA"
+                    android:inputType="text"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Price -->
+                <EditText
+                    android:id="@+id/etPrecio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Precio ($)"
+                    android:textColorHint="#AAAAAA"
+                    android:inputType="numberDecimal"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Description -->
+                <EditText
+                    android:id="@+id/etDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descripción del producto"
+                    android:textColorHint="#AAAAAA"
+                    android:inputType="textMultiLine"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Category label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categoría:"
+                    android:textColor="#333333"
+                    android:textSize="14sp"/>
+
+                <!-- Category Spinner -->
+                <Spinner
+                    android:id="@+id/spinnerCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Image placeholder -->
+                <ImageView
+                    android:id="@+id/ivProductImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:contentDescription="Imagen del producto" />
+
+                <!-- Confirmation checkbox -->
+                <CheckBox
+                    android:id="@+id/cbConfirmar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Confirmo que los datos son correctos"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Add to catalog button (disabled style) -->
+                <Button
+                    android:id="@+id/btnAgregar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Agregar al catálogo"
+                    android:enabled="false"
+                    android:backgroundTint="#CCCCCC"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="8dp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- View catalog button -->
+        <Button
+            android:id="@+id/btnVerCatalogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="16dp"
+            android:text="Ver catálogo"
+            android:backgroundTint="#5B2D8E"
+            android:textColor="#FFFFFF"/>
+
+    </LinearLayout>
+</ScrollView>
