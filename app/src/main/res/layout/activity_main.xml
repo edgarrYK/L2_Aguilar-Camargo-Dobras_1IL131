@@ -17,9 +17,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#6B3FA0"
+            android:background="#E64A19"
             android:padding="8dp"
-            app:title="Tienda de Tecnología"
+            app:title="Powell Express"
             app:titleTextColor="#FFFFFF" />
 
         <!-- Product count label -->
@@ -31,10 +31,10 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="4dp"
             android:text="0 productos"
-            android:textColor="#6B3FA0"
+            android:textColor="#FF5722"
             android:textSize="12sp" />
 
-        <!-- Form Card -->
+        <!-- Formulario  -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,17 +48,17 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Section title -->
+                <!-- Titulo -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nuevo producto"
-                    android:textColor="#6B3FA0"
+                    android:textColor="#FF5722"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp"/>
 
-                <!-- Product name -->
+                <!-- nombre del producto -->
                 <EditText
                     android:id="@+id/etNombre"
                     android:layout_width="match_parent"
@@ -69,7 +69,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:layout_marginBottom="12dp"/>
 
-                <!-- Price -->
+                <!-- Precio -->
                 <EditText
                     android:id="@+id/etPrecio"
                     android:layout_width="match_parent"
@@ -80,7 +80,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:layout_marginBottom="12dp"/>
 
-                <!-- Description -->
+                <!-- Descripcion -->
                 <EditText
                     android:id="@+id/etDescripcion"
                     android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     android:background="@android:drawable/editbox_background_normal"
                     android:layout_marginBottom="12dp"/>
 
-                <!-- Category label -->
+                <!-- Categoria label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -99,14 +99,14 @@
                     android:textColor="#333333"
                     android:textSize="14sp"/>
 
-                <!-- Category Spinner -->
+                <!-- Categoria Spinner -->
                 <Spinner
                     android:id="@+id/spinnerCategoria"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"/>
 
-                <!-- Image placeholder -->
+                <!--  placeholder -->
                 <ImageView
                     android:id="@+id/ivProductImage"
                     android:layout_width="80dp"
@@ -116,7 +116,7 @@
                     android:src="@mipmap/ic_launcher"
                     android:contentDescription="Imagen del producto" />
 
-                <!-- Confirmation checkbox -->
+                <!--  checkbox de confirmacion-->
                 <CheckBox
                     android:id="@+id/cbConfirmar"
                     android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                     android:textSize="14sp"
                     android:layout_marginBottom="16dp"/>
 
-                <!-- Add to catalog button (disabled style) -->
+                <!-- agregar catalogo boton -->
                 <Button
                     android:id="@+id/btnAgregar"
                     android:layout_width="match_parent"
@@ -139,7 +139,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- View catalog button -->
+        <!-- ver catalogo boton -->
         <Button
             android:id="@+id/btnVerCatalogo"
             android:layout_width="match_parent"
@@ -148,7 +148,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="16dp"
             android:text="Ver catálogo"
-            android:backgroundTint="#5B2D8E"
+            android:backgroundTint="#FF5722"
             android:textColor="#FFFFFF"/>
 
     </LinearLayout>
