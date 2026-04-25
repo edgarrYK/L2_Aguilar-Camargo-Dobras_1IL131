@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     // Spinner  ArrayAdapter
     private fun setupSpinner() {
-        val categorias = listOf("Hamburguesa", "Sushi", "Pizza", "Ensalada", "Bebida")
+        val categorias = listOf("Seleccione una categoría", "Hamburguesa", "Sushi", "Pizza", "Ensalada", "Bebida")
 
         val adapter = ArrayAdapter(
             this,
@@ -108,6 +108,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
 
         spinnerCategoria.adapter = adapter
+
+        spinnerCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val categoriaSeleccionada = parent.getItemAtPosition(position).toString()
+
+                if (position == 0) {
+                    ivProductImage.setImageResource(R.drawable.ic_placeholder)
+                } else {
+                    val imgRes = categoryImages[categoriaSeleccionada] ?: R.drawable.ic_placeholder
+                    ivProductImage.setImageResource(imgRes)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                ivProductImage.setImageResource(R.drawable.ic_placeholder)
+            }
+        }
     }
 
     // CheckBox controles
@@ -145,9 +162,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val nombre      = etNombre.text.toString().trim()
         val precioStr   = etPrecio.text.toString().trim()
         val descripcion = etDescripcion.text.toString().trim()
-        val categoria   = spinnerCategoria.selectedItem?.toString() ?: ""
+        val categoria = spinnerCategoria.selectedItem?.toString() ?: ""
+        val categoriaPosicion = spinnerCategoria.selectedItemPosition
 
         var hayError = false
+
 
         if (nombre.isEmpty()) {
             etNombre.error = "El nombre no puede estar vacío"
@@ -176,6 +195,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             descripcion = descripcion,
             categoria   = categoria
         )
+
+        if (categoriaPosicion == 0) {
+            Toast.makeText(this, "Por favor, seleccione una categoría válida", Toast.LENGTH_SHORT).show()
+            hayError = true
+        }
+
+        if (hayError) return
+
         catalogoProductos.add(producto)
 
         tvProductCount.text = "${catalogoProductos.size} producto(s)"
