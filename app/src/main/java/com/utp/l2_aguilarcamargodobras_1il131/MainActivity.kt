@@ -9,15 +9,14 @@ import androidx.appcompat.widget.Toolbar
 import android.content.Intent
 import java.io.Serializable
 
-// data class para items
 data class Producto(
-    val nombre: String,
-    val precio: Double,
-    val descripcion: String,
-    val categoria: String
+    var nombre: String,
+    var precio: Double,
+    var descripcion: String,
+    var categoria: String
 ) : Serializable
 
-// ArrayAdapter para lista
+
 class ProductoAdapter(
     context: android.content.Context,
     private val productos: List<Producto>,
@@ -29,7 +28,6 @@ class ProductoAdapter(
             .inflate(R.layout.item_producto, parent, false)
 
         val producto = productos[position]
-
         val ivImagen = view.findViewById<ImageView>(R.id.ivItemImagen)
         val tvNombre = view.findViewById<TextView>(R.id.tvItemNombre)
         val tvSecundario = view.findViewById<TextView>(R.id.tvItemSecundario)
@@ -44,10 +42,8 @@ class ProductoAdapter(
     }
 }
 
-// MainActivity
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    // Views
     private lateinit var etNombre: EditText
     private lateinit var etPrecio: EditText
     private lateinit var etDescripcion: EditText
@@ -58,33 +54,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnVerCatalogo: Button
     private lateinit var tvProductCount: TextView
 
-    // Data
-    private val catalogoProductos = mutableListOf<Producto>()
-
     private val categoryImages = mapOf(
         "Hamburguesa" to R.drawable.ic_burger,
-        "Sushi"       to R.drawable.ic_sushi,
-        "Pizza"       to R.drawable.ic_pizza,
-        "Ensalada"    to R.drawable.ic_salad,
-        "Bebida"      to R.drawable.ic_drink
+        "Sushi" to R.drawable.ic_sushi,
+        "Pizza" to R.drawable.ic_pizza,
+        "Ensalada" to R.drawable.ic_salad,
+        "Bebida" to R.drawable.ic_drink
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-
-        etNombre       = findViewById(R.id.etNombre)
-        etPrecio       = findViewById(R.id.etPrecio)
-        etDescripcion  = findViewById(R.id.etDescripcion)
+        etNombre = findViewById(R.id.etNombre)
+        etPrecio = findViewById(R.id.etPrecio)
+        etDescripcion = findViewById(R.id.etDescripcion)
         spinnerCategoria = findViewById(R.id.spinnerCategoria)
         ivProductImage = findViewById(R.id.ivProductImage)
-        cbConfirmar    = findViewById(R.id.cbConfirmar)
-        btnAgregar     = findViewById(R.id.btnAgregar)
+        cbConfirmar = findViewById(R.id.cbConfirmar)
+        btnAgregar = findViewById(R.id.btnAgregar)
         btnVerCatalogo = findViewById(R.id.btnVerCatalogo)
         tvProductCount = findViewById(R.id.tvProductCount)
 
@@ -97,37 +88,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnAgregar.isEnabled = false
     }
 
-    // Spinner  ArrayAdapter
+    override fun onResume() {
+        super.onResume()
+        actualizarContador()
+    }
+
     private fun setupSpinner() {
         val categorias = listOf("Seleccione una categoría", "Hamburguesa", "Sushi", "Pizza", "Ensalada", "Bebida")
-
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            categorias
-        ).also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categorias).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
         spinnerCategoria.adapter = adapter
 
         spinnerCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val categoriaSeleccionada = parent.getItemAtPosition(position).toString()
-
                 if (position == 0) {
                     ivProductImage.setImageResource(R.drawable.ic_placeholder)
                 } else {
-                    val imgRes = categoryImages[categoriaSeleccionada] ?: R.drawable.ic_placeholder
-                    ivProductImage.setImageResource(imgRes)
+                    val cat = parent.getItemAtPosition(position).toString()
+                    ivProductImage.setImageResource(categoryImages[cat] ?: R.drawable.ic_placeholder)
                 }
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                ivProductImage.setImageResource(R.drawable.ic_placeholder)
-            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
     }
 
-    // CheckBox controles
     private fun setupCheckBox() {
         cbConfirmar.setOnCheckedChangeListener { _, isChecked ->
             btnAgregar.isEnabled = isChecked
@@ -137,96 +122,49 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btnAgregar     -> agregarProducto()
+            R.id.btnAgregar -> agregarProducto()
             R.id.btnVerCatalogo -> verCatalogo()
         }
     }
 
-
-    private fun mostrarDialogoDetalles(producto: Producto) {
-        val builder = android.app.AlertDialog.Builder(this)
-        builder.setTitle("Detalles del Producto")
-        builder.setMessage(
-            "Nombre: ${producto.nombre}\n" +
-                    "Precio: $${producto.precio}\n" +
-                    "Categoría: ${producto.categoria}\n" +
-                    "Descripción: ${producto.descripcion}"
-        )
-        builder.setPositiveButton("Cerrar", null)
-        builder.show()
-    }
-
-
-    // validación
     private fun agregarProducto() {
-        val nombre      = etNombre.text.toString().trim()
-        val precioStr   = etPrecio.text.toString().trim()
+        val nombre = etNombre.text.toString().trim()
+        val precioStr = etPrecio.text.toString().trim()
         val descripcion = etDescripcion.text.toString().trim()
-        val categoria = spinnerCategoria.selectedItem?.toString() ?: ""
-        val categoriaPosicion = spinnerCategoria.selectedItemPosition
+        val categoria = spinnerCategoria.selectedItem.toString()
+        val pos = spinnerCategoria.selectedItemPosition
 
-        var hayError = false
-
-
-        if (nombre.isEmpty()) {
-            etNombre.error = "El nombre no puede estar vacío"
-            hayError = true
+        if (nombre.isEmpty()) { etNombre.error = "Campo requerido"; return }
+        if (precioStr.isEmpty() || precioStr.toDoubleOrNull() == null || precioStr.toDouble() <= 0) {
+            etPrecio.error = "Precio inválido"; return
+        }
+        if (descripcion.isEmpty()) { etDescripcion.error = "Campo requerido"; return }
+        if (pos == 0) {
+            Toast.makeText(this, "Seleccione una categoría", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        if (precioStr.isEmpty()) {
-            etPrecio.error = "Ingrese un precio"
-            hayError = true
-        } else if (precioStr.toDoubleOrNull() == null || precioStr.toDouble() <= 0) {
-            etPrecio.error = "Ingrese un precio válido"
-            hayError = true
-        }
+        DataHolder.catalogoProductos.add(Producto(nombre, precioStr.toDouble(), descripcion, categoria))
+        actualizarContador()
 
-        if (descripcion.isEmpty()) {
-            etDescripcion.error = "La descripción no puede estar vacía"
-            hayError = true
-        }
-
-        if (hayError) return
-
-        //  agregar al catalogo
-        val producto = Producto(
-            nombre      = nombre,
-            precio      = precioStr.toDouble(),
-            descripcion = descripcion,
-            categoria   = categoria
-        )
-
-        if (categoriaPosicion == 0) {
-            Toast.makeText(this, "Por favor, seleccione una categoría válida", Toast.LENGTH_SHORT).show()
-            hayError = true
-        }
-
-        if (hayError) return
-
-        catalogoProductos.add(producto)
-
-        tvProductCount.text = "${catalogoProductos.size} producto(s)"
-
-        // Reset
         etNombre.text.clear()
         etPrecio.text.clear()
         etDescripcion.text.clear()
         spinnerCategoria.setSelection(0)
         cbConfirmar.isChecked = false
-        btnAgregar.isEnabled = false
-        btnAgregar.alpha = 0.5f
 
-        Toast.makeText(this, "Producto agregado al catálogo", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Producto registrado", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun actualizarContador() {
+        tvProductCount.text = "${DataHolder.catalogoProductos.size} producto(s)"
     }
 
     private fun verCatalogo() {
-        if (catalogoProductos.isEmpty()) {
-            Toast.makeText(this, "No hay productos registrados", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val intent = Intent(this, CatalogoActivity::class.java)
-        intent.putExtra("LISTA_PRODUCTOS", ArrayList(catalogoProductos))
-        startActivity(intent)
+        if (DataHolder.catalogoProductos.isEmpty()) {
+            Toast.makeText(this, "Catálogo vacío", Toast.LENGTH_SHORT).show()
+        } else {
+            startActivity(Intent(this, CatalogoActivity::class.java))
         }
     }
+}
